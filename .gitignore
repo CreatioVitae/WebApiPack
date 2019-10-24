@@ -1,0 +1,9 @@
+/.vs
+/src/.vs
+/src/Service.Extensions.DependencyInjection/obj
+/src/Service.Extensions.DependencyInjection/bin
+/src/Swagger.Extensions.DependencyInjection/obj
+/src/Swagger.Extensions.DependencyInjection/bin
+/src/WebApiPack/obj
+/src/WebApiPack/bin
+/src/WebApiPack/*.user
