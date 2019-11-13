@@ -12,7 +12,7 @@ namespace WebApiPack.Controllers {
 
         public static ActionResult CreateHttpGetResult(this ControllerBase controllerBase, object apiResult) {
             return apiResult is IEnumerable<object> e
-                ? e.Count() > 0 ? (ObjectResult) controllerBase.Ok(apiResult) : controllerBase.NotFound(new ErrorResult($"リソース[{controllerBase.HttpContext.GetPathPlusQueryStrings()}]が見つかりません"))
+                ? e.Any() ? (ObjectResult) controllerBase.Ok(apiResult) : controllerBase.NotFound(new ErrorResult($"リソース[{controllerBase.HttpContext.GetPathPlusQueryStrings()}]が見つかりません"))
                 : apiResult != default ? (ObjectResult) controllerBase.Ok(apiResult) : controllerBase.NotFound(new ErrorResult($"リソース[{controllerBase.HttpContext.GetPathPlusQueryStrings()}]が見つかりません"));
         }
     }

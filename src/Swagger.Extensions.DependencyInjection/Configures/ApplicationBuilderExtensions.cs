@@ -10,6 +10,6 @@ namespace Microsoft.AspNetCore.Builder {
             DefaultEnvironmentNames.Staging => app,
             DefaultEnvironmentNames.Production => app,
             _ => throw new ArgumentException(nameof(environmentName))
-        };
+        };           
     }
 }

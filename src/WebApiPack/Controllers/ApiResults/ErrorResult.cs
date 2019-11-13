@@ -5,12 +5,12 @@ namespace WebApiPack.Controllers.ApiResults {
         public ErrorResult() {
         }
 
-        public ErrorResult(string message, Exception exception = default) {
+        public ErrorResult(string? message, Exception? exception = default) {
             Message = message;
             Exception = exception;
         }
 
-        public string Message { get; }
-        public Exception Exception { get; }
+        public string? Message { get; }
+        public Exception? Exception { get; }
     }
 }
