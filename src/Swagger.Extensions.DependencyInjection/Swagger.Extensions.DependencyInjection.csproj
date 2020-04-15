@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>0.2.1-beta</Version>
+    <Version>0.3.1-beta</Version>
     <Authors>Vitae</Authors>
     <Description>For ASP.NET Core Swagger Extension;
 
@@ -20,6 +20,6 @@ Include Default Builder;</Description>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WebPack.CoreLib" Version="0.2.1-beta" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.1.0" />
   </ItemGroup>
 </Project>

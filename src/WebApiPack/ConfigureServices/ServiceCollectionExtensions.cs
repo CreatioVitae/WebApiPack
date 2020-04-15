@@ -8,9 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection {
                 .AddMvcCore(option => {
                     option.OutputFormatters.Clear();
                     option.OutputFormatters.Add(new Utf8Json.AspNetCoreMvcFormatter.JsonOutputFormatter(StandardResolver.ExcludeNullCamelCase));
-                    option.InputFormatters.Clear();
-                    option.InputFormatters.Add(new Utf8Json.AspNetCoreMvcFormatter.JsonInputFormatter(StandardResolver.ExcludeNullCamelCase));
-
                 })
                 .AddApiExplorer()
                 .AddAuthorization()
