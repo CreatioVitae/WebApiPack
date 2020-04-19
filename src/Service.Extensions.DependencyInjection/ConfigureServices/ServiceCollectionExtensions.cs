@@ -1,4 +1,4 @@
-﻿using Service.Extensions.DependencyInjection.Markers;
+using Service.Extensions.DependencyInjection.Markers;
 using System;
 using System.Linq;
 
@@ -16,8 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection {
             return AddScopedServicesFromInjectionMarker<IMarker>(serviceDescriptors, types);
         }
 
-        public static IServiceCollection AddDefaultScopedServices(this IServiceCollection serviceDescriptors, Type[] types) {
-            return serviceDescriptors.AddScopedServices<IService>(types).AddScopedServices<IRepository>(types);
-        }
+        public static IServiceCollection AddDefaultScopedServices(this IServiceCollection serviceDescriptors, Type[] types) =>
+            serviceDescriptors.AddScopedServices<IService>(types).AddScopedServices<IRepository>(types);
     }
 }
