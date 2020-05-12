@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection {
                 .AddMvcCore(option => {
                     option.OutputFormatters.Clear();
                     option.OutputFormatters.Add(new Utf8Json.AspNetCoreMvcFormatter.JsonOutputFormatter(StandardResolver.ExcludeNullCamelCase));
-                    option.Filters.Add(new ProducesAttribute("application/json"));
+                    option.Filters.Add(new ProducesAttribute("text/plain", "application/json", "text/json"));
                 })
                 .AddApiExplorer()
                 .AddAuthorization()
