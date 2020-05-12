@@ -8,11 +8,22 @@ namespace Microsoft.Extensions.DependencyInjection {
             serviceDescriptors.AddSwaggerGen(c => {
                 c.SwaggerDoc(swaggerDocSettings.DocName, new OpenApiInfo { Title = swaggerDocSettings.Info.Title, Version = swaggerDocSettings.Info.Version });
                 c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out var methodInfo) ? methodInfo.Name.RemoveFromEnd("Async") : null);
+                c.DocumentFilter<AdditionalParametersDocumentFilter>();
             });
 
         internal static string RemoveFromEnd(this string target, string suffix) =>
             target.EndsWith(suffix)
             ? target.Substring(0, target.Length - suffix.Length)
             : target;
+    }
+
+    internal class AdditionalParametersDocumentFilter : IDocumentFilter {
+        public void Apply(OpenApiDocument openApiDoc, DocumentFilterContext context) {
+            foreach (var schema in context.SchemaRepository.Schemas) {
+                if (schema.Value.AdditionalProperties == null) {
+                    schema.Value.AdditionalPropertiesAllowed = true;
+                }
+            }
+        }
     }
 }
