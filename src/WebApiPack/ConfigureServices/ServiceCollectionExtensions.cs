@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Utf8Json.Resolvers;
 using WebApiPack.ConstantValues;
 
@@ -9,10 +10,11 @@ namespace Microsoft.Extensions.DependencyInjection {
                 .AddMvcCore(option => {
                     option.OutputFormatters.Clear();
                     option.OutputFormatters.Add(new Utf8Json.AspNetCoreMvcFormatter.JsonOutputFormatter(StandardResolver.ExcludeNullCamelCase));
+                    option.Filters.Add(new ProducesAttribute("application/json"));
                 })
                 .AddApiExplorer()
                 .AddAuthorization()
-                .AddCors(option => { option.AddPolicy(CorsConstantValues.PolicyName, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); })
+                .AddCors(option => option.AddPolicy(CorsConstantValues.PolicyName, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()))
                 .AddDataAnnotations()
                 .AddFormatterMappings();
     }
