@@ -4,7 +4,7 @@ using WebApiPack.ConstantValues;
 
 namespace Microsoft.Extensions.DependencyInjection {
     public static class ServiceCollectionExtensions {
-        public static IMvcCoreBuilder CreateDefaultBuilder(this IServiceCollection serviceDescriptors) =>
+        public static IServiceCollection CreateDefaultBuilder(this IServiceCollection serviceDescriptors) {
             serviceDescriptors
                 .AddHttpContextAccessor()
                 .AddMvcCore(option => {
@@ -17,5 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection {
                 .AddCors(option => option.AddPolicy(CorsConstantValues.PolicyName, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()))
                 .AddDataAnnotations()
                 .AddFormatterMappings();
+
+            return serviceDescriptors;
+        }
     }
 }
