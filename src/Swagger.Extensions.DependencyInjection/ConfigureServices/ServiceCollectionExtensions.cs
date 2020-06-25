@@ -11,6 +11,15 @@ namespace Microsoft.Extensions.DependencyInjection {
                 c.DocumentFilter<AdditionalParametersDocumentFilter>();
             });
 
+        public static IServiceCollection AddDefaultSwaggerService<TFilter>(this IServiceCollection serviceDescriptors, SwaggerDocSettings swaggerDocSettings) where TFilter : IOperationFilter =>
+            serviceDescriptors.AddSwaggerGen(c => {
+                c.SwaggerDoc(swaggerDocSettings.DocName, new OpenApiInfo { Title = swaggerDocSettings.Info.Title, Version = swaggerDocSettings.Info.Version });
+                c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out var methodInfo) ? methodInfo.Name.RemoveFromEnd("Async") : null);
+                c.DocumentFilter<AdditionalParametersDocumentFilter>();
+
+                c.OperationFilter<TFilter>();
+            });
+
         internal static string RemoveFromEnd(this string target, string suffix) =>
             target.EndsWith(suffix)
             ? target.Substring(0, target.Length - suffix.Length)
