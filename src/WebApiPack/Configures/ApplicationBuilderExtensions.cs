@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using WebApiPack.Configurations;
 using WebApiPack.ConstantValues;
 
 namespace Microsoft.AspNetCore.Builder {
     public static class ApplicationBuilderExtensions {
-        public static IApplicationBuilder UseDefaultBuilder(this IApplicationBuilder app, string environmentName) {
-            static IEnvironmentBuilder GetEnvironmentBuilder(string environmentName) {
-                IEnvironmentBuilder environmentBuilder;
-                environmentBuilder = environmentName switch
+        public static IApplicationBuilder UseDefaultBuilder(this IApplicationBuilder app, string environmentName, PathBase? pathBase = null) {
+            static IEnvironmentBuilder GetEnvironmentBuilder(string environmentName) =>
+                environmentName switch
                 {
                     DefaultEnvironmentNames.Development => new DevelopmentBuilder(),
                     DefaultEnvironmentNames.DevelopmentRemote => new DevelopmentRemoteBuilder(),
@@ -16,15 +16,17 @@ namespace Microsoft.AspNetCore.Builder {
                     _ => throw new System.ArgumentException($"{nameof(environmentName)}")
                 };
 
-                return environmentBuilder;
+            app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
+
+            if (pathBase is PathBase) {
+                app.UsePathBase(pathBase.Value);
             }
 
             return GetEnvironmentBuilder(environmentName)
                 .UseEnvironmentBuilder(app)
-                .UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto })
                 .UseHttpsRedirection()
                 .UseRouting()
-                .UseCors(CorsConstantValues.PolicyName)
+                .UseCors(CorsConst.PolicyName)
                 .UseAuthorization()
                 .UseExceptionMiddleware();
         }
@@ -42,11 +44,11 @@ namespace Microsoft.AspNetCore.Builder {
         }
 
         private class StagingBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) => app.UseHsts();
+            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) => app;
         }
 
         private class ProductionBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) => app.UseHsts();
+            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) => app;
         }
     }
 }

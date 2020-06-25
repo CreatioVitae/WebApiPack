@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection {
                     }
                 })
                 .AddJsonOptions(option => option.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
-                .AddCors(option => option.AddPolicy(CorsConstantValues.PolicyName, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+                .AddCors(option => option.AddPolicy(CorsConst.PolicyName, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
             return serviceDescriptors;
         }
