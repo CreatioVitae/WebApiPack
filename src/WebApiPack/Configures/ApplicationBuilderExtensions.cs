@@ -7,8 +7,7 @@ namespace Microsoft.AspNetCore.Builder {
     public static class ApplicationBuilderExtensions {
         public static IApplicationBuilder UseDefaultBuilder(this IApplicationBuilder app, string environmentName, PathBase? pathBase = null) {
             static IEnvironmentBuilder GetEnvironmentBuilder(string environmentName) =>
-                environmentName switch
-                {
+                environmentName switch {
                     DefaultEnvironmentNames.Development => new DevelopmentBuilder(),
                     DefaultEnvironmentNames.DevelopmentRemote => new DevelopmentRemoteBuilder(),
                     DefaultEnvironmentNames.Staging => new StagingBuilder(),
