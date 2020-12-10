@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Serilog;
 using System;
 using System.Threading.Tasks;
@@ -21,9 +21,7 @@ namespace WebApiPack.Middlewares {
         }
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception) {
-            //Todo:Create HttpException Handler;
-
-            Log.Fatal(exception, $"{nameof(HandleExceptionAsync)}");
+            Log.Fatal(exception, $"{nameof(HandleExceptionAsync)}", new { originalPath = context.Request.Path, RequestHeaders = context.Request.Headers });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
