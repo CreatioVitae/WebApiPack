@@ -5,9 +5,14 @@ VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiPack", "src\WebApiPack\WebApiPack.csproj", "{0B8BF2D9-1542-46D5-945B-F63ABAE14FC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swagger.Extensions.DependencyInjection", "src\Swagger.Extensions.DependencyInjection\Swagger.Extensions.DependencyInjection.csproj", "{333412F0-890E-45BF-AE7B-5D39DF49C816}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swagger.Extensions.DependencyInjection", "src\Swagger.Extensions.DependencyInjection\Swagger.Extensions.DependencyInjection.csproj", "{333412F0-890E-45BF-AE7B-5D39DF49C816}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Extensions.DependencyInjection", "src\Service.Extensions.DependencyInjection\Service.Extensions.DependencyInjection.csproj", "{79C16F09-815D-481B-9D8B-C0F9F1A0A762}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Extensions.DependencyInjection", "src\Service.Extensions.DependencyInjection\Service.Extensions.DependencyInjection.csproj", "{79C16F09-815D-481B-9D8B-C0F9F1A0A762}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F491BD24-6BCD-416D-81DD-910BC7AD56AB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
