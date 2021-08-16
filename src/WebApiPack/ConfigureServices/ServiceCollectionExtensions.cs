@@ -7,16 +7,18 @@ using WebApiPack.ConstantValues;
 
 namespace Microsoft.Extensions.DependencyInjection {
     public static class ServiceCollectionExtensions {
-        public static IServiceCollection CreateDefaultBuilder(this IServiceCollection serviceDescriptors, IEnumerable<Type>? filterTypesForGlobalEntry = null) {
+        public static IServiceCollection CreateDefaultBuilder(this IServiceCollection serviceDescriptors, IEnumerable<Type>? filterTypesForGlobalEntry = null, bool useUtf8JsonAsOutputFormatter = true) {
             serviceDescriptors
                 .AddHttpContextAccessor()
                 .AddControllers();
 
             serviceDescriptors
                 .AddMvcCore(option => {
-                    option.OutputFormatters.Clear();
-                    option.OutputFormatters.Add(new Utf8Json.AspNetCoreMvcFormatter.JsonOutputFormatter(StandardResolver.ExcludeNullCamelCase));
-                    option.Filters.Add(new ProducesAttribute("text/plain", "application/json", "text/json"));
+                    if (useUtf8JsonAsOutputFormatter) { 
+                        option.OutputFormatters.Clear();
+                        option.OutputFormatters.Add(new Utf8Json.AspNetCoreMvcFormatter.JsonOutputFormatter(StandardResolver.ExcludeNullCamelCase));
+                        option.Filters.Add(new ProducesAttribute("text/plain", "application/json", "text/json"));
+                    }
 
                     if (filterTypesForGlobalEntry is IEnumerable<Type>) {
                         foreach (var filterTypeForGlobalEntry in filterTypesForGlobalEntry) {

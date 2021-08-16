@@ -35,19 +35,23 @@ namespace Microsoft.AspNetCore.Builder {
         }
 
         private class DevelopmentRemoteBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) => app.UseDeveloperExceptionPage();
+            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
+                app.UseDeveloperExceptionPage();
         }
 
         private class DevelopmentBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) => app.UseDeveloperExceptionPage();
+            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
+                app.UseDeveloperExceptionPage();
         }
 
         private class StagingBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) => app;
+            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
+                app;
         }
 
         private class ProductionBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) => app;
+            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
+                app;
         }
     }
 }

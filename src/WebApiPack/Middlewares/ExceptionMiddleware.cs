@@ -21,6 +21,8 @@ namespace WebApiPack.Middlewares {
         }
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception) {
+            //Todo:HttpException Handling...
+
             Log.Fatal(exception, $"{nameof(HandleExceptionAsync)}", new { originalPath = context.Request.Path, RequestHeaders = context.Request.Headers });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
