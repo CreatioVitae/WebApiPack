@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Swagger.Extensions.DependencyInjection.Configurations;
 using System;
 
@@ -13,5 +14,8 @@ namespace Microsoft.AspNetCore.Builder {
                 DefaultEnvironmentNames.Production => app,
                 _ => throw new ArgumentException(nameof(environmentName))
             };
+
+        public static SwaggerUiSettings GetSwaggerUiSettings(this IConfiguration configuration) =>
+            configuration.GetSection(nameof(SwaggerUiSettings)).Get<SwaggerUiSettings>();
     }
 }

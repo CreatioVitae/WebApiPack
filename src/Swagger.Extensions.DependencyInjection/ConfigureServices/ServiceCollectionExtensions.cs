@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Swagger.Extensions.DependencyInjection.Configurations;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -23,6 +24,9 @@ namespace Microsoft.Extensions.DependencyInjection {
 
                 c.OperationFilter<TFilter>();
             });
+
+        public static SwaggerGenSettings GetSwaggerGenSettings(this IConfiguration configuration) =>
+            configuration.GetSection(nameof(SwaggerGenSettings)).Get<SwaggerGenSettings>();
 
         internal static void AddDefaultAuthentication(this SwaggerGenOptions c, SwaggerGenSettings swaggerGenSettings) {
             if (swaggerGenSettings.AuthenticationSettings.AuthenticationIsEnable is false) {

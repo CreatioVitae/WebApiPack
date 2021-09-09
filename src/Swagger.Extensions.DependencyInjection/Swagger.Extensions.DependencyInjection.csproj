@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>0.7.1-beta</Version>
+    <Version>0.7.5-beta</Version>
     <Authors>Vitae</Authors>
     <Description>For ASP.NET Core Swagger Extension;
 
 Include Default Builder;</Description>
     <PackageProjectUrl>https://github.com/CreatioVitae/WebApiPack</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>0.7.1.0</AssemblyVersion>
+    <AssemblyVersion>0.7.5.0</AssemblyVersion>
     <PackageReleaseNotes>Add Basic Authentication...</PackageReleaseNotes>
   </PropertyGroup>
 
@@ -22,7 +22,7 @@ Include Default Builder;</Description>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WebPack.CoreLib" Version="0.9.1-beta" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
-    <PackageReference Include="WebPack.Identity.CoreLib" Version="0.1.2-beta" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+    <PackageReference Include="WebPack.Identity.CoreLib" Version="0.1.4-beta" />
   </ItemGroup>
 </Project>
