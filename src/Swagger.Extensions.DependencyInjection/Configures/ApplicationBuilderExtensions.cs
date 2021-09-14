@@ -11,8 +11,8 @@ namespace Microsoft.AspNetCore.Builder {
                 DefaultEnvironmentNames.Development => app.UseSwagger().UseSwaggerUI(option => { option.SwaggerEndpoint(swaggerUiSettings.Url, swaggerUiSettings.Name); }),
                 DefaultEnvironmentNames.DevelopmentRemote => app.UseSwagger().UseSwaggerUI(option => { option.SwaggerEndpoint(swaggerUiSettings.Url, swaggerUiSettings.Name); }),
                 DefaultEnvironmentNames.Staging => app,
-                DefaultEnvironmentNames.Production => app,
-                _ => throw new ArgumentException(nameof(environmentName))
+                DefaultEnvironmentNames.Production => app.UseSwagger().UseSwaggerUI(option => { option.SwaggerEndpoint(swaggerUiSettings.Url, swaggerUiSettings.Name); }),
+                _ => app
             };
 
         public static SwaggerUiSettings GetSwaggerUiSettings(this IConfiguration configuration) =>

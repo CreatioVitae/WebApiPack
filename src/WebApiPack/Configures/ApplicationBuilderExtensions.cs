@@ -1,34 +1,46 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Configuration;
 using WebApiPack.Configurations;
 using WebApiPack.ConstantValues;
 
 namespace Microsoft.AspNetCore.Builder {
     public static class ApplicationBuilderExtensions {
-        public static IApplicationBuilder UseDefaultBuilder(this IApplicationBuilder app, string environmentName, PathBase? pathBase = null) {
+        public static IApplicationBuilder UseDefaultBuilder(this IApplicationBuilder app, string environmentName, ConfigureSettings? configureSettings = null) {
             static IEnvironmentBuilder GetEnvironmentBuilder(string environmentName) =>
                 environmentName switch {
                     DefaultEnvironmentNames.Development => new DevelopmentBuilder(),
                     DefaultEnvironmentNames.DevelopmentRemote => new DevelopmentRemoteBuilder(),
                     DefaultEnvironmentNames.Staging => new StagingBuilder(),
                     DefaultEnvironmentNames.Production => new ProductionBuilder(),
-                    _ => throw new System.ArgumentException($"{nameof(environmentName)}")
+                    _ => new DevelopmentBuilder(),
                 };
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
 
-            if (pathBase is PathBase) {
-                app.UsePathBase(pathBase.Value);
+            if (configureSettings?.PathBase is PathBase) {
+                app.UsePathBase(configureSettings.PathBase.Value);
             }
 
-            return GetEnvironmentBuilder(environmentName)
-                .UseEnvironmentBuilder(app)
-                .UseHttpsRedirection()
-                .UseRouting()
-                .UseCors(CorsConst.PolicyName)
-                .UseAuthorization()
-                .UseExceptionMiddleware();
+            GetEnvironmentBuilder(environmentName).UseEnvironmentBuilder(app);
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseCors(CorsConst.PolicyName);
+
+            if (configureSettings?.AuthenticationIsEnable ?? false) {
+                app.UseAuthentication();
+            }
+
+            app.UseAuthorization();
+
+            return app.UseExceptionMiddleware();
         }
+
+        public static ConfigureSettings? GetConfigureSettings(this IConfiguration configuration) =>
+            configuration.GetSection(nameof(ConfigureSettings)).Get<ConfigureSettings>();
 
         private interface IEnvironmentBuilder {
             IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app);
