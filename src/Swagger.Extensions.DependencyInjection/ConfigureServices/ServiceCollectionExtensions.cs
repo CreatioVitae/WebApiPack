@@ -4,22 +4,25 @@ using Microsoft.OpenApi.Models;
 using Swagger.Extensions.DependencyInjection.Configurations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection {
     public static class ServiceCollectionExtensions {
-        public static IServiceCollection AddDefaultSwaggerService(this IServiceCollection serviceDescriptors, SwaggerGenSettings swaggerGenSettings) =>
+        public static IServiceCollection AddDefaultSwaggerService(this IServiceCollection serviceDescriptors, SwaggerGenSettings swaggerGenSettings, Assembly executingAssembly) =>
             serviceDescriptors.AddSwaggerGen(c => {
-                c.DefaultSwaggerDoc(swaggerGenSettings.SwaggerDocSettings);
+                c.AddDefaultSwaggerDoc(swaggerGenSettings.SwaggerDocSettings);
                 c.AddDefaultAuthentication(swaggerGenSettings);
-                c.DefaultCustomOperationIds();
+                c.AddDefaultCustomOperationIds();
+                c.AddxmlCommentsIncluding(swaggerGenSettings, executingAssembly);
                 c.DocumentFilter<AdditionalParametersDocumentFilter>();
             });
 
         public static IServiceCollection AddDefaultSwaggerService<TFilter>(this IServiceCollection serviceDescriptors, SwaggerGenSettings swaggerGenSettings) where TFilter : IOperationFilter =>
             serviceDescriptors.AddSwaggerGen(c => {
-                c.DefaultSwaggerDoc(swaggerGenSettings.SwaggerDocSettings);
+                c.AddDefaultSwaggerDoc(swaggerGenSettings.SwaggerDocSettings);
                 c.AddDefaultAuthentication(swaggerGenSettings);
-                c.DefaultCustomOperationIds();
+                c.AddDefaultCustomOperationIds();
                 c.DocumentFilter<AdditionalParametersDocumentFilter>();
 
                 c.OperationFilter<TFilter>();
@@ -29,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection {
             configuration.GetSection(nameof(SwaggerGenSettings)).Get<SwaggerGenSettings>();
 
         internal static void AddDefaultAuthentication(this SwaggerGenOptions c, SwaggerGenSettings swaggerGenSettings) {
-            if (swaggerGenSettings.AuthenticationSettings.AuthenticationIsEnable is false) {
+            if (swaggerGenSettings.AuthenticationSettings.AuthenticationEnable is false) {
                 return;
             }
 
@@ -65,10 +68,19 @@ namespace Microsoft.Extensions.DependencyInjection {
             });
         }
 
-        internal static void DefaultSwaggerDoc(this SwaggerGenOptions c, SwaggerDocSettings swaggerDocSettings) =>
+        internal static void AddxmlCommentsIncluding(this SwaggerGenOptions c, SwaggerGenSettings swaggerGenSettings, Assembly executingAssembly) {
+            if (swaggerGenSettings.XmlCommentsIncludingEnable is false) {
+                return;
+            }
+
+            var xmlFile = $"{executingAssembly.GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
+        }
+        internal static void AddDefaultSwaggerDoc(this SwaggerGenOptions c, SwaggerDocSettings swaggerDocSettings) =>
             c.SwaggerDoc(swaggerDocSettings.DocName, new OpenApiInfo { Title = swaggerDocSettings.Info.Title, Version = swaggerDocSettings.Info.Version });
 
-        internal static void DefaultCustomOperationIds(this SwaggerGenOptions c) =>
+        internal static void AddDefaultCustomOperationIds(this SwaggerGenOptions c) =>
             c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out var methodInfo) ? methodInfo.Name.RemoveFromEnd("Async") : null);
 
         internal static string RemoveFromEnd(this string target, string suffix) =>

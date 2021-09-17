@@ -2,11 +2,13 @@ namespace Swagger.Extensions.DependencyInjection.Configurations {
     public class SwaggerGenSettings {
         public AuthenticationSettings AuthenticationSettings { get; init; }
 
+        public bool XmlCommentsIncludingEnable { get; init; }
+
         public SwaggerDocSettings SwaggerDocSettings { get; init; }
     }
 
     public class AuthenticationSettings {
-        public bool AuthenticationIsEnable { get; init; }
+        public bool AuthenticationEnable { get; init; }
 
         public string AuthorizationType { get; init; }
     }
