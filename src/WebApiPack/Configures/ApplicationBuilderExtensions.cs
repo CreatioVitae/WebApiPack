@@ -30,7 +30,7 @@ namespace Microsoft.AspNetCore.Builder {
 
             app.UseCors(CorsConst.PolicyName);
 
-            if (configureSettings?.AuthenticationIsEnable ?? false) {
+            if (configureSettings?.AuthenticationEnable ?? false) {
                 app.UseAuthentication();
             }
 
