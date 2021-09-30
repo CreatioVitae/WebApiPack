@@ -17,6 +17,6 @@ namespace Microsoft.Extensions.DependencyInjection {
         }
 
         public static IServiceCollection AddDefaultScopedServices(this IServiceCollection serviceDescriptors, Type[] types) =>
-            serviceDescriptors.AddScopedServices<IService>(types).AddScopedServices<IRepository>(types);
+            serviceDescriptors.AddScopedServices<IService>(types).AddScopedServices<IRepository>(types).AddScopedServices<IContext>(types);
     }
 }
