@@ -1,6 +1,11 @@
+using BclExtensionPack.CoreLib;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
 using Swagger.Extensions.DependencyInjection.Configurations;
+using System;
+using System.Collections.Generic;
 
 namespace Microsoft.AspNetCore.Builder {
     public static class ApplicationBuilderExtensions {
@@ -9,7 +14,27 @@ namespace Microsoft.AspNetCore.Builder {
                 app
                     .UseSwagger(option => {
                         if (swaggerSettings.RouteTemplateSettings.IsOverridable) {
-                            option.RouteTemplate = swaggerSettings.RouteTemplateSettings.RouteTemplate;
+                            option.RouteTemplate = $"{swaggerSettings.RouteTemplateSettings.RouteTemplatePrefix}{option.RouteTemplate}";
+                        }
+
+                        if (swaggerSettings.OpenApiServerPathBaseSettings.IsOverridable) {
+                            option.PreSerializeFilters.Add((swaggerDoc, httpRequest) => {
+                                static string GetSchemeName(HttpRequest httpRequest, bool forceHttps) =>
+                                    forceHttps ? Uri.UriSchemeHttps : httpRequest.Scheme;
+
+                                static UriBuilder CreateUriBuilder(HttpRequest httpRequest, string schemeName) =>
+                                    httpRequest.Host.Port switch {
+                                        null => new UriBuilder(schemeName, httpRequest.Host.Host),
+                                        _ => new UriBuilder(schemeName, httpRequest.Host.Host, httpRequest.Host.Port.Value)
+                                    };
+
+                                swaggerDoc.Servers = new List<OpenApiServer> {
+                                    new() { Url = CreateUriBuilder(
+                                        httpRequest,
+                                        GetSchemeName(httpRequest,swaggerSettings.OpenApiServerPathBaseSettings.ForceHttps)
+                                    ).AppendPath(swaggerSettings.OpenApiServerPathBaseSettings.PathBase).ToString() }
+                                };
+                            });
                         }
                     })
                     .UseSwaggerUI(option => {
