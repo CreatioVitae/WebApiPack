@@ -22,6 +22,6 @@ Include Default Builder;</Description>
   <ItemGroup>
     <PackageReference Include="WebPack.CoreLib" Version="0.9.1-beta" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-    <PackageReference Include="WebPack.Identity.CoreLib" Version="0.3.2" />
+    <PackageReference Include="WebPack.Identity.CoreLib" Version="0.4.1" />
   </ItemGroup>
 </Project>
