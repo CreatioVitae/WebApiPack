@@ -1,7 +1,7 @@
-namespace WebApiPack.Configurations {
-    public class ConfigureSettings {
-        public bool AuthenticationEnable { get; init; }
+namespace WebApiPack.Configurations;
 
-        public PathBase? PathBase { get; init; }
-    }
+public class ConfigureSettings {
+    public bool AuthenticationEnable { get; init; }
+
+    public PathBase? PathBase { get; init; }
 }
