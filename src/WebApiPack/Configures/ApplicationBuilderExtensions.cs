@@ -4,66 +4,66 @@ using Microsoft.Extensions.Configuration;
 using WebApiPack.Configurations;
 using WebApiPack.ConstantValues;
 
-namespace Microsoft.AspNetCore.Builder {
-    public static class ApplicationBuilderExtensions {
-        public static IApplicationBuilder UseDefaultBuilder(this IApplicationBuilder app, string environmentName, ConfigureSettings? configureSettings = null) {
-            static IEnvironmentBuilder GetEnvironmentBuilder(string environmentName) =>
-                environmentName switch {
-                    DefaultEnvironmentNames.Development => new DevelopmentBuilder(),
-                    DefaultEnvironmentNames.DevelopmentRemote => new DevelopmentRemoteBuilder(),
-                    DefaultEnvironmentNames.Staging => new StagingBuilder(),
-                    DefaultEnvironmentNames.Production => new ProductionBuilder(),
-                    _ => new DevelopmentBuilder(),
-                };
+namespace Microsoft.AspNetCore.Builder;
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
+public static class ApplicationBuilderExtensions {
+    public static IApplicationBuilder UseDefaultBuilder(this IApplicationBuilder app, string environmentName, ConfigureSettings? configureSettings = null) {
+        static IEnvironmentBuilder GetEnvironmentBuilder(string environmentName) =>
+            environmentName switch {
+                DefaultEnvironmentNames.Development => new DevelopmentBuilder(),
+                DefaultEnvironmentNames.DevelopmentRemote => new DevelopmentRemoteBuilder(),
+                DefaultEnvironmentNames.Staging => new StagingBuilder(),
+                DefaultEnvironmentNames.Production => new ProductionBuilder(),
+                _ => new DevelopmentBuilder(),
+            };
 
-            if (configureSettings?.PathBase is PathBase) {
-                app.UsePathBase(configureSettings.PathBase.Value);
-            }
+        app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
 
-            GetEnvironmentBuilder(environmentName).UseEnvironmentBuilder(app);
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseCors(CorsConst.PolicyName);
-
-            if (configureSettings?.AuthenticationEnable ?? false) {
-                app.UseAuthentication();
-            }
-
-            app.UseAuthorization();
-
-            return app.UseExceptionMiddleware();
+        if (configureSettings?.PathBase is PathBase) {
+            app.UsePathBase(configureSettings.PathBase.Value);
         }
 
-        public static ConfigureSettings? GetConfigureSettings(this IConfiguration configuration) =>
-            configuration.GetSection(nameof(ConfigureSettings)).Get<ConfigureSettings>();
+        GetEnvironmentBuilder(environmentName).UseEnvironmentBuilder(app);
 
-        private interface IEnvironmentBuilder {
-            IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app);
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+
+        app.UseCors(CorsConst.PolicyName);
+
+        if (configureSettings?.AuthenticationEnable ?? false) {
+            app.UseAuthentication();
         }
 
-        private class DevelopmentRemoteBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
-                app.UseDeveloperExceptionPage();
-        }
+        app.UseAuthorization();
 
-        private class DevelopmentBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
-                app.UseDeveloperExceptionPage();
-        }
+        return app.UseExceptionMiddleware();
+    }
 
-        private class StagingBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
-                app;
-        }
+    public static ConfigureSettings? GetConfigureSettings(this IConfiguration configuration) =>
+        configuration.GetSection(nameof(ConfigureSettings)).Get<ConfigureSettings>();
 
-        private class ProductionBuilder : IEnvironmentBuilder {
-            public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
-                app;
-        }
+    private interface IEnvironmentBuilder {
+        IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app);
+    }
+
+    private class DevelopmentRemoteBuilder : IEnvironmentBuilder {
+        public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
+            app.UseDeveloperExceptionPage();
+    }
+
+    private class DevelopmentBuilder : IEnvironmentBuilder {
+        public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
+            app.UseDeveloperExceptionPage();
+    }
+
+    private class StagingBuilder : IEnvironmentBuilder {
+        public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
+            app;
+    }
+
+    private class ProductionBuilder : IEnvironmentBuilder {
+        public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
+            app;
     }
 }

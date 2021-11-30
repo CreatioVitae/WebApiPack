@@ -1,4 +1,4 @@
-﻿namespace WebApiPack.Controllers.ApiResults {
-    public interface IApiResult {
-    }
+namespace WebApiPack.Controllers.ApiResults;
+
+public interface IApiResult {
 }

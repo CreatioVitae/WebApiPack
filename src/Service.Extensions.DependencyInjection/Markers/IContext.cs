@@ -1,3 +1,3 @@
-namespace Service.Extensions.DependencyInjection.Markers {
-    public interface IContext { }
-}
+namespace Service.Extensions.DependencyInjection.Markers;
+
+public interface IContext { }

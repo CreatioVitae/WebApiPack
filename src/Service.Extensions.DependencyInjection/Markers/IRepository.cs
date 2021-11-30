@@ -1,4 +1,3 @@
-﻿namespace Service.Extensions.DependencyInjection.Markers {
-    public interface IRepository {
-    }
-}
+namespace Service.Extensions.DependencyInjection.Markers;
+
+public interface IRepository { }
