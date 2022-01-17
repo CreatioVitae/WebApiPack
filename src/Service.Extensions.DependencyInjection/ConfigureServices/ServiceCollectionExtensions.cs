@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions {
             foreach (var type in types.Where(c => c.GetInterfaces().Any(t => t == typeof(InjectionMarker)))) {
                 serviceDescriptors.AddScoped(type, type);
             }
+
             return serviceDescriptors;
         }
 
@@ -18,5 +19,8 @@ public static class ServiceCollectionExtensions {
     }
 
     public static IServiceCollection AddDefaultScopedServices(this IServiceCollection serviceDescriptors, Type[] types) =>
-        serviceDescriptors.AddScopedServices<IService>(types).AddScopedServices<IRepository>(types).AddScopedServices<IContext>(types).AddScopedServices<ICache>(types);
+        serviceDescriptors.AddScopedServices<IService>(types).AddScopedServices<IRepository>(types).AddScopedServices<ICache>(types);
+
+    public static IServiceCollection AddRequestContext<TRequestContext>(this IServiceCollection serviceDescriptors, string timezoneId) where TRequestContext : class, IRequestContext, new() =>
+        serviceDescriptors.AddScoped(serviceProvider => IRequestContext.CreateRequestContext<TRequestContext>(timezoneId));
 }
