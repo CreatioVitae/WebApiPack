@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,15 +6,15 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <Version>0.9.10</Version>
+    <Version>0.9.11</Version>
     <Authors>Vitae</Authors>
     <PackageProjectUrl>https://github.com/CreatioVitae/WebApiPack</PackageProjectUrl>
     <Description>For ASP.NET Core REST API Pack;
 
 Include Default Builder;</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <FileVersion>0.9.7.0</FileVersion>
-    <PackageReleaseNotes>Upgrade WebPack.CoreLib...</PackageReleaseNotes>
+    <FileVersion></FileVersion>
+    <PackageReleaseNotes>add ApiResult Injected method...</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

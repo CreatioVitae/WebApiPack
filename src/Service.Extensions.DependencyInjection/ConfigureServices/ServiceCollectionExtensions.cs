@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions {
             foreach (var type in types.Where(c => c.GetInterfaces().Any(t => t == typeof(InjectionMarker)))) {
                 serviceDescriptors.AddScoped(type, type);
             }
+
             return serviceDescriptors;
         }
 
