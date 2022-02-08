@@ -10,22 +10,30 @@ using System.Reflection;
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions {
-    public static IServiceCollection AddDefaultSwaggerService(this IServiceCollection serviceDescriptors, SwaggerGenSettings swaggerGenSettings, Assembly executingAssembly) =>
+    public static IServiceCollection AddDefaultSwaggerService(this IServiceCollection serviceDescriptors, SwaggerGenSettings swaggerGenSettings, Assembly? executingAssembly = null) =>
         serviceDescriptors.AddSwaggerGen(c => {
             c.AddDefaultSwaggerDoc(swaggerGenSettings.SwaggerDocSettings);
             c.AddDefaultAuthentication(swaggerGenSettings);
             c.AddDefaultCustomOperationIds();
-            c.AddxmlCommentsIncluding(swaggerGenSettings, executingAssembly);
+
+            if (executingAssembly is not null) {
+                c.AddxmlCommentsIncluding(swaggerGenSettings, executingAssembly);
+            }
+
             c.DocumentFilter<AdditionalParametersDocumentFilter>();
         });
 
-    public static IServiceCollection AddDefaultSwaggerService<TFilter>(this IServiceCollection serviceDescriptors, SwaggerGenSettings swaggerGenSettings) where TFilter : IOperationFilter =>
+    public static IServiceCollection AddDefaultSwaggerService<TFilter>(this IServiceCollection serviceDescriptors, SwaggerGenSettings swaggerGenSettings, Assembly? executingAssembly = null) where TFilter : IOperationFilter =>
         serviceDescriptors.AddSwaggerGen(c => {
             c.AddDefaultSwaggerDoc(swaggerGenSettings.SwaggerDocSettings);
             c.AddDefaultAuthentication(swaggerGenSettings);
             c.AddDefaultCustomOperationIds();
-            c.DocumentFilter<AdditionalParametersDocumentFilter>();
 
+            if (executingAssembly is not null) {
+                c.AddxmlCommentsIncluding(swaggerGenSettings, executingAssembly);
+            }
+
+            c.DocumentFilter<AdditionalParametersDocumentFilter>();
             c.OperationFilter<TFilter>();
         });
 
@@ -64,7 +72,7 @@ public static class ServiceCollectionExtensions {
                             Id = AuthorizationType.Basic
                         }
                     },
-                    new string[] {}
+                    Array.Empty<string>()
                 }
             });
     }
