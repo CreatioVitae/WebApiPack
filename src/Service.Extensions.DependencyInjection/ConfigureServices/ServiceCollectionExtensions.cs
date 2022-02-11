@@ -54,6 +54,7 @@ public static class ServiceCollectionExtensions {
 
         return services
             .AddHttpClient<TClient>(configureClient)
+            .SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Todo: Optional
             .AddPolicyHandler(GetRetryPolicy(options.RetryPolicyOption))
             .AddPolicyHandler(GetCircuitBreakerPolicy(options.CircuitBreakerPolicyOption));
     }
