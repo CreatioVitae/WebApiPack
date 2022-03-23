@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
@@ -58,4 +60,7 @@ public static class ServiceCollectionExtensions {
             .AddPolicyHandler(GetRetryPolicy(options.RetryPolicyOption))
             .AddPolicyHandler(GetCircuitBreakerPolicy(options.CircuitBreakerPolicyOption));
     }
+
+    public static OptionsBuilder<StorageMountOptions> AddStorageMountOptions(this IServiceCollection services, IConfiguration configuration) =>
+        services.AddOptions<StorageMountOptions>().Bind(configuration.GetSection(nameof(StorageMountOptions))).ValidateDataAnnotations();
 }
