@@ -3,14 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>1.1.6</Version>
+    <Version>1.1.8.6</Version>
     <Authors>Vitae</Authors>
     <Description>For ASP.NET Core Swagger Extension;
 
 Include Default Builder;</Description>
     <PackageProjectUrl>https://github.com/CreatioVitae/WebApiPack</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>update nuget package</PackageReleaseNotes>
+    <PackageReleaseNotes>refine SwaggerBuildOptions</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -21,7 +21,7 @@ Include Default Builder;</Description>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WebPack.CoreLib" Version="0.9.13" />
+    <PackageReference Include="WebPack.CoreLib" Version="0.9.15" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
     <PackageReference Include="WebPack.Identity.CoreLib" Version="0.4.9" />
   </ItemGroup>

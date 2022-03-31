@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Configuration;
-using WebApiPack.Configurations;
 using WebApiPack.ConstantValues;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -40,29 +38,26 @@ public static class ApplicationBuilderExtensions {
         return app.UseExceptionMiddleware();
     }
 
-    public static ConfigureSettings? GetConfigureSettings(this IConfiguration configuration) =>
-        configuration.GetSection(nameof(ConfigureSettings)).Get<ConfigureSettings>();
-
-    private interface IEnvironmentBuilder {
+    interface IEnvironmentBuilder {
         IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app);
     }
 
-    private class DevelopmentRemoteBuilder : IEnvironmentBuilder {
+    class DevelopmentRemoteBuilder : IEnvironmentBuilder {
         public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
             app.UseDeveloperExceptionPage();
     }
 
-    private class DevelopmentBuilder : IEnvironmentBuilder {
+    class DevelopmentBuilder : IEnvironmentBuilder {
         public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
             app.UseDeveloperExceptionPage();
     }
 
-    private class StagingBuilder : IEnvironmentBuilder {
+    class StagingBuilder : IEnvironmentBuilder {
         public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
             app;
     }
 
-    private class ProductionBuilder : IEnvironmentBuilder {
+    class ProductionBuilder : IEnvironmentBuilder {
         public IApplicationBuilder UseEnvironmentBuilder(IApplicationBuilder app) =>
             app;
     }

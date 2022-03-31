@@ -2,17 +2,21 @@ using BclExtensionPack.CoreLib;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swagger.Extensions.DependencyInjection.Configurations;
-using System;
 using System.Collections.Generic;
 
 namespace Microsoft.AspNetCore.Builder;
 
 public static class ApplicationBuilderExtensions {
-    public static IApplicationBuilder UseDefaultSwaggerBuilder(this IApplicationBuilder app, SwaggerSettings swaggerSettings, SwaggerUiSettings swaggerUiSettings, string environmentName) {
-        static IApplicationBuilder UseDefaultSwaggerBuilderLocal(IApplicationBuilder app, SwaggerSettings swaggerSettings, SwaggerUiSettings swaggerUiSettings) =>
-            app
+    public static IApplicationBuilder UseDefaultSwaggerBuilder(this IApplicationBuilder app, IConfiguration configuration, string environmentName) {
+        static IApplicationBuilder UseDefaultSwaggerBuilderLocal(IApplicationBuilder app, IConfiguration configuration) {
+            var builderOptions = configuration.GetSwaggerBuilderOptions();
+            var configureSettings = configuration.GetConfigureSettings();
+            var (swaggerSettings, swaggerUiSettings) = (new SwaggerSettings(configureSettings, builderOptions), new SwaggerUiSettings(configureSettings, builderOptions));
+
+            return app
                 .UseSwagger(option => {
                     if (swaggerSettings.RouteTemplateSettings.IsOverridable) {
                         option.RouteTemplate = $"{swaggerSettings.RouteTemplateSettings.RouteTemplatePrefix}{option.RouteTemplate}";
@@ -44,10 +48,11 @@ public static class ApplicationBuilderExtensions {
                         option.RoutePrefix = swaggerUiSettings.RoutePrefixSettings.RoutePrefix;
                     }
                 });
+        }
 
         return environmentName switch {
-            DefaultEnvironmentNames.Development => UseDefaultSwaggerBuilderLocal(app, swaggerSettings, swaggerUiSettings),
-            DefaultEnvironmentNames.DevelopmentRemote => UseDefaultSwaggerBuilderLocal(app, swaggerSettings, swaggerUiSettings),
+            DefaultEnvironmentNames.Development => UseDefaultSwaggerBuilderLocal(app, configuration),
+            DefaultEnvironmentNames.DevelopmentRemote => UseDefaultSwaggerBuilderLocal(app, configuration),
             DefaultEnvironmentNames.Staging => app,
             DefaultEnvironmentNames.Production => app,
             _ => app
@@ -55,9 +60,6 @@ public static class ApplicationBuilderExtensions {
 
     }
 
-    public static SwaggerSettings GetSwaggerSettings(this IConfiguration configuration) =>
-        configuration.GetSection(nameof(SwaggerSettings)).Get<SwaggerSettings>();
-
-    public static SwaggerUiSettings GetSwaggerUiSettings(this IConfiguration configuration) =>
-        configuration.GetSection(nameof(SwaggerUiSettings)).Get<SwaggerUiSettings>();
+    public static SwaggerBuilderOptions GetSwaggerBuilderOptions(this IConfiguration configuration) =>
+        configuration.GetSection(nameof(SwaggerBuilderOptions)).GetAvailable<SwaggerBuilderOptions>();
 }

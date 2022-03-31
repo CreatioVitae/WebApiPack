@@ -1,17 +1,19 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Swagger.Extensions.DependencyInjection.Configurations;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.IO;
 using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions {
-    public static IServiceCollection AddDefaultSwaggerService(this IServiceCollection serviceDescriptors, SwaggerGenSettings swaggerGenSettings, Assembly? executingAssembly = null) =>
-        serviceDescriptors.AddSwaggerGen(c => {
+    public static IServiceCollection AddDefaultSwaggerService(this IServiceCollection serviceDescriptors, IConfiguration configuration, Assembly? executingAssembly = null) {
+        var swaggerGenSettings = new SwaggerGenSettings(configuration.GetConfigureSettings(), configuration.GetSwaggerBuilderOptions());
+
+        return serviceDescriptors.AddSwaggerGen(c => {
             c.AddDefaultSwaggerDoc(swaggerGenSettings.SwaggerDocSettings);
             c.AddDefaultAuthentication(swaggerGenSettings);
             c.AddDefaultCustomOperationIds();
@@ -22,9 +24,12 @@ public static class ServiceCollectionExtensions {
 
             c.DocumentFilter<AdditionalParametersDocumentFilter>();
         });
+    }
 
-    public static IServiceCollection AddDefaultSwaggerService<TFilter>(this IServiceCollection serviceDescriptors, SwaggerGenSettings swaggerGenSettings, Assembly? executingAssembly = null) where TFilter : IOperationFilter =>
-        serviceDescriptors.AddSwaggerGen(c => {
+    public static IServiceCollection AddDefaultSwaggerService<TFilter>(this IServiceCollection serviceDescriptors, IConfiguration configuration, Assembly? executingAssembly = null) where TFilter : IOperationFilter {
+        var swaggerGenSettings = new SwaggerGenSettings(configuration.GetConfigureSettings(), configuration.GetSwaggerBuilderOptions());
+
+        return serviceDescriptors.AddSwaggerGen(c => {
             c.AddDefaultSwaggerDoc(swaggerGenSettings.SwaggerDocSettings);
             c.AddDefaultAuthentication(swaggerGenSettings);
             c.AddDefaultCustomOperationIds();
@@ -36,9 +41,7 @@ public static class ServiceCollectionExtensions {
             c.DocumentFilter<AdditionalParametersDocumentFilter>();
             c.OperationFilter<TFilter>();
         });
-
-    public static SwaggerGenSettings GetSwaggerGenSettings(this IConfiguration configuration) =>
-        configuration.GetSection(nameof(SwaggerGenSettings)).Get<SwaggerGenSettings>();
+    }
 
     internal static void AddDefaultAuthentication(this SwaggerGenOptions c, SwaggerGenSettings swaggerGenSettings) {
         if (swaggerGenSettings.AuthenticationSettings.AuthenticationEnable is false) {
