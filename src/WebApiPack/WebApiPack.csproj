@@ -27,7 +27,7 @@ Include Default Builder;</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WebPack.CoreLib" Version="0.9.13" />
+    <PackageReference Include="WebPack.CoreLib" Version="0.9.15" />
     <PackageReference Include="Utf8Json" Version="1.3.7" />
     <PackageReference Include="Utf8Json.AspNetCoreMvcFormatter" Version="1.3.7" />
   </ItemGroup>
