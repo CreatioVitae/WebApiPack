@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>1.1.8.6</Version>
+    <Version>1.1.8.7</Version>
     <Authors>Vitae</Authors>
     <Description>For ASP.NET Core Swagger Extension;
 
@@ -21,8 +21,8 @@ Include Default Builder;</Description>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WebPack.CoreLib" Version="0.9.15" />
+    <PackageReference Include="WebPack.CoreLib" Version="0.9.16" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
-    <PackageReference Include="WebPack.Identity.CoreLib" Version="0.4.9" />
+    <PackageReference Include="WebPack.Identity.CoreLib" Version="0.4.10" />
   </ItemGroup>
 </Project>
