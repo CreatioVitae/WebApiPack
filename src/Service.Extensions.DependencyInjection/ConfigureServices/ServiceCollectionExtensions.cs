@@ -6,6 +6,7 @@ using Polly.Extensions.Http;
 using Service.Extensions.DependencyInjection.Markers;
 using Service.Extensions.DependencyInjection.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,20 +33,15 @@ public static class ServiceCollectionExtensions {
     public static IServiceCollection AddRequestContext<TRequestContext>(this IServiceCollection serviceDescriptors, string timezoneId) where TRequestContext : class, IRequestContext, new() =>
         serviceDescriptors.AddScoped(serviceProvider => IRequestContext.CreateRequestContext<TRequestContext>(timezoneId));
 
-    static readonly PolicyHandleOptions _defaultPolicyHandleOptions = new() {
-        RetryPolicyOption = new() { MedianFirstRetryDelaySeconds = 1, RetryCount = 3 },
-        CircuitBreakerPolicyOption = new() { HandledEventsAllowCountBeforeBreaking = 5, DurationOfBreakSeconds = 30 }
-    };
-
     public static IHttpClientBuilder AddApiClient<TClient>(this IServiceCollection services, Action<HttpClient> configureClient, PolicyHandleOptions? options = null) where TClient : class, IApiClient {
-        options ??= _defaultPolicyHandleOptions;
+        options ??= PolicyHandleOptions.CreateDefault();
 
         static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(RetryPolicyOption option) {
             var delay = Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(option.MedianFirstRetryDelaySeconds), retryCount: option.RetryCount);
 
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
-                .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
+                .OrResultIf(option.ClientErrorStatusCodesRequiresRetry)
                 .WaitAndRetryAsync(delay);
         }
 
@@ -59,6 +55,14 @@ public static class ServiceCollectionExtensions {
             .SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Todo: Optional
             .AddPolicyHandler(GetRetryPolicy(options.RetryPolicyOption))
             .AddPolicyHandler(GetCircuitBreakerPolicy(options.CircuitBreakerPolicyOption));
+    }
+
+    static PolicyBuilder<HttpResponseMessage> OrResultIf(this PolicyBuilder<HttpResponseMessage> policyBuilder, IEnumerable<HttpStatusCode>? clientErrorStatusCodesRequiresRetry) {
+        if (clientErrorStatusCodesRequiresRetry is IEnumerable<HttpStatusCode> nonNullRequiresRetry && nonNullRequiresRetry.Any()) {
+            return policyBuilder.OrResult(msg => nonNullRequiresRetry.Contains(msg.StatusCode));
+        }
+
+        return policyBuilder;
     }
 
     public static OptionsBuilder<StorageMountOptions> AddStorageMountOptions(this IServiceCollection services, IConfiguration configuration) =>
