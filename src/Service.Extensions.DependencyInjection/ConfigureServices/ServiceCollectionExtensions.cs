@@ -18,7 +18,12 @@ public static class ServiceCollectionExtensions {
         //Extend Points:Injection Process From Injection Marker.
         static IServiceCollection AddScopedServicesFromInjectionMarker<InjectionMarker>(IServiceCollection serviceDescriptors, Type[] types) {
             foreach (var type in types.Where(c => c.GetInterfaces().Any(t => t == typeof(InjectionMarker)))) {
-                serviceDescriptors.AddScoped(type, type);
+                if (type.GetInterfaces().SingleOrDefault(i => i.Name == $"I{type.Name}") is { } specializedInterface) {
+                    serviceDescriptors.AddScoped(specializedInterface, type);
+                }
+                else {
+                    serviceDescriptors.AddScoped(type, type);
+                }
             }
 
             return serviceDescriptors;
