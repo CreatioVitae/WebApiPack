@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.IO;
 using System.Reflection;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions {
@@ -97,7 +98,7 @@ public static class ServiceCollectionExtensions {
 
     internal static string RemoveFromEnd(this string target, string suffix) =>
         target.EndsWith(suffix)
-        ? target.Substring(0, target.Length - suffix.Length)
+        ? target[..^suffix.Length]
         : target;
 }
 

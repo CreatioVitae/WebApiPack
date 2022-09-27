@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using WebApiPack.ConstantValues;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.AspNetCore.Builder;
 
 public static class ApplicationBuilderExtensions {
@@ -17,7 +18,7 @@ public static class ApplicationBuilderExtensions {
 
         app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
 
-        if (configureSettings?.PathBase is PathBase) {
+        if (configureSettings?.PathBase is not null) {
             app.UsePathBase(configureSettings.PathBase.Value);
         }
 

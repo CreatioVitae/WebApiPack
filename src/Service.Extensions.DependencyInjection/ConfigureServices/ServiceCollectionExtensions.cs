@@ -11,13 +11,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions {
     public static IServiceCollection AddScopedServices<IMarker>(this IServiceCollection serviceDescriptors, Type[] types) {
         //Extend Points:Injection Process From Injection Marker.
-        static IServiceCollection AddScopedServicesFromInjectionMarker<InjectionMarker>(IServiceCollection serviceDescriptors, Type[] types) {
-            foreach (var type in types.Where(c => c.GetInterfaces().Any(t => t == typeof(InjectionMarker)))) {
+        static IServiceCollection AddScopedServicesFromInjectionMarker<TInjectionMarker>(IServiceCollection serviceDescriptors, Type[] types) {
+            foreach (var type in types.Where(c => c.GetInterfaces().Any(t => t == typeof(TInjectionMarker)))) {
                 if (type.GetInterfaces().SingleOrDefault(i => i.Name == $"I{type.Name}") is { } specializedInterface) {
                     serviceDescriptors.AddScoped(specializedInterface, type);
                 }

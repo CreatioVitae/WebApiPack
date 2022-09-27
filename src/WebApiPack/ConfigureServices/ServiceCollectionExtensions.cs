@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions {
                     option.Filters.Add(new ProducesAttribute("text/plain", "application/json", "text/json"));
                 }
 
-                if (filterTypesForGlobalEntry is IEnumerable<Type>) {
+                if (filterTypesForGlobalEntry is not null) {
                     foreach (var filterTypeForGlobalEntry in filterTypesForGlobalEntry) {
                         option.Filters.Add(filterTypeForGlobalEntry);
                     }
