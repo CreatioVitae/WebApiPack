@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
@@ -36,9 +34,6 @@ public static class ServiceCollectionExtensions {
     public static IServiceCollection AddDefaultScopedServices(this IServiceCollection serviceDescriptors, Type[] types) =>
         serviceDescriptors.AddScopedServices<IService>(types).AddScopedServices<IRepository>(types).AddScopedServices<ICache>(types);
 
-    public static IServiceCollection AddRequestContext<TRequestContext>(this IServiceCollection serviceDescriptors, string timezoneId) where TRequestContext : class, IRequestContext, new() =>
-        serviceDescriptors.AddScoped(serviceProvider => IRequestContext.CreateRequestContext<TRequestContext>(timezoneId));
-
     public static IHttpClientBuilder AddApiClient<TClient>(this IServiceCollection services, Action<HttpClient> configureClient, PolicyHandleOptions? options = null) where TClient : class, IApiClient {
         options ??= PolicyHandleOptions.CreateDefault();
 
@@ -63,14 +58,8 @@ public static class ServiceCollectionExtensions {
             .AddPolicyHandler(GetCircuitBreakerPolicy(options.CircuitBreakerPolicyOption));
     }
 
-    static PolicyBuilder<HttpResponseMessage> OrResultIf(this PolicyBuilder<HttpResponseMessage> policyBuilder, IEnumerable<HttpStatusCode>? clientErrorStatusCodesRequiresRetry) {
-        if (clientErrorStatusCodesRequiresRetry is IEnumerable<HttpStatusCode> nonNullRequiresRetry && nonNullRequiresRetry.Any()) {
-            return policyBuilder.OrResult(msg => nonNullRequiresRetry.Contains(msg.StatusCode));
-        }
-
-        return policyBuilder;
-    }
-
-    public static OptionsBuilder<StorageMountOptions> AddStorageMountOptions(this IServiceCollection services, IConfiguration configuration) =>
-        services.AddOptions<StorageMountOptions>().Bind(configuration.GetSection(nameof(StorageMountOptions))).ValidateDataAnnotations();
+    static PolicyBuilder<HttpResponseMessage> OrResultIf(this PolicyBuilder<HttpResponseMessage> policyBuilder, IEnumerable<HttpStatusCode>? clientErrorStatusCodesRequiresRetry) =>
+        clientErrorStatusCodesRequiresRetry is IEnumerable<HttpStatusCode> nonNullRequiresRetry && nonNullRequiresRetry.Any()
+            ? policyBuilder.OrResult(msg => nonNullRequiresRetry.Contains(msg.StatusCode))
+            : policyBuilder;
 }
