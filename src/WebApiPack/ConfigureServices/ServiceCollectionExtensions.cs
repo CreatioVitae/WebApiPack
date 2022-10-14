@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using Utf8Json.Resolvers;
 using WebApiPack.ConstantValues;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions {

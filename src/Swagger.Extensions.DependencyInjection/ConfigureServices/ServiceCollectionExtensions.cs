@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions {
             c.AddDefaultCustomOperationIds();
 
             if (executingAssembly is not null) {
-                c.AddxmlCommentsIncluding(swaggerGenSettings, executingAssembly);
+                c.AddXmlCommentsIncluding(swaggerGenSettings, executingAssembly);
             }
 
             c.DocumentFilter<AdditionalParametersDocumentFilter>();
@@ -36,7 +36,7 @@ public static class ServiceCollectionExtensions {
             c.AddDefaultCustomOperationIds();
 
             if (executingAssembly is not null) {
-                c.AddxmlCommentsIncluding(swaggerGenSettings, executingAssembly);
+                c.AddXmlCommentsIncluding(swaggerGenSettings, executingAssembly);
             }
 
             c.DocumentFilter<AdditionalParametersDocumentFilter>();
@@ -81,7 +81,7 @@ public static class ServiceCollectionExtensions {
             });
     }
 
-    internal static void AddxmlCommentsIncluding(this SwaggerGenOptions c, SwaggerGenSettings swaggerGenSettings, Assembly executingAssembly) {
+    internal static void AddXmlCommentsIncluding(this SwaggerGenOptions c, SwaggerGenSettings swaggerGenSettings, Assembly executingAssembly) {
         if (swaggerGenSettings.XmlCommentsIncludingEnable is false) {
             return;
         }
