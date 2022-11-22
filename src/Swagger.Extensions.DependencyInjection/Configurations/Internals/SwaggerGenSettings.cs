@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 
+// ReSharper disable once CheckNamespace
 namespace Swagger.Extensions.DependencyInjection.Configurations;
 
 internal class SwaggerGenSettings {
