@@ -6,7 +6,7 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <Version>0.9.24</Version>
+    <Version>0.9.25.3</Version>
     <Authors>Vitae</Authors>
     <PackageProjectUrl>https://github.com/CreatioVitae/WebApiPack</PackageProjectUrl>
     <Description>For ASP.NET Core REST API Pack;
@@ -14,7 +14,8 @@
 Include Default Builder;</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <FileVersion></FileVersion>
-    <PackageReleaseNotes>without Utf8Json.</PackageReleaseNotes>
+    <PackageReleaseNotes>without Utf8Json Part2.</PackageReleaseNotes>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
