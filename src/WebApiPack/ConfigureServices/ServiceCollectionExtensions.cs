@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using WebApiPack.ConstantValues;
 
@@ -14,15 +15,18 @@ public static class ServiceCollectionExtensions {
 
         serviceDescriptors
             .AddMvcCore(option => {
-                if (filterTypesForGlobalEntry is not null) {
-                    foreach (var filterTypeForGlobalEntry in filterTypesForGlobalEntry) {
-                        option.Filters.Add(filterTypeForGlobalEntry);
-                    }
+                if (filterTypesForGlobalEntry is null) {
+                    return;
+                }
+
+                foreach (var filterTypeForGlobalEntry in filterTypesForGlobalEntry) {
+                    option.Filters.Add(filterTypeForGlobalEntry);
                 }
             })
             .AddJsonOptions(option => {
                 option.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 option.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                option.JsonSerializerOptions.Encoder = new NoEscapingJsonEncoder();
             })
             .AddCors(option => option.AddPolicy(CorsConst.PolicyName, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
