@@ -28,6 +28,6 @@ Include Default Builder;</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WebPack.CoreLib" Version="0.9.23" />
+    <PackageReference Include="WebPack.CoreLib" Version="0.9.24" />
   </ItemGroup>
 </Project>
