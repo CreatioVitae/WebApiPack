@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Http;
 using Serilog;
 using System;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Utf8Json.Resolvers;
 using WebApiPack.Controllers.ApiResults;
 
 namespace WebApiPack.Middlewares;
@@ -28,6 +30,16 @@ public class ExceptionMiddleware {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-        return context.Response.WriteAsync(Utf8Json.JsonSerializer.ToJsonString(new ErrorResult("システムエラーが発生しました。", exception), StandardResolver.ExcludeNullCamelCase));
+        return context.Response.WriteAsync(
+            JsonSerializer.Serialize(
+                new ErrorResult("システムエラーが発生しました。", exception),
+                new JsonSerializerOptions {
+                    Encoder = new NoEscapingJsonEncoder(),
+                    WriteIndented = true,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                }
+            )
+        );
     }
 }
