@@ -6,7 +6,7 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <Version>0.9.26.2</Version>
+    <Version>0.9.27.1</Version>
     <Authors>Vitae</Authors>
     <PackageProjectUrl>https://github.com/CreatioVitae/WebApiPack</PackageProjectUrl>
     <Description>For ASP.NET Core REST API Pack;
@@ -28,6 +28,6 @@ Include Default Builder;</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WebPack.CoreLib" Version="0.9.24" />
+    <PackageReference Include="WebPack.CoreLib" Version="0.9.25" />
   </ItemGroup>
 </Project>
