@@ -24,7 +24,11 @@ public static class ApplicationBuilderExtensions {
 
         GetEnvironmentBuilder(environmentName).UseEnvironmentBuilder(app);
 
-        app.UseHttpsRedirection();
+        var ignoreForceRedirectsToHttps = configureSettings?.IgnoreForceRedirectsToHttps ?? false;
+
+        if (ignoreForceRedirectsToHttps is false) {
+            app.UseHttpsRedirection();
+        }
 
         app.UseRouting();
 
