@@ -51,21 +51,23 @@ public static class ServiceCollectionExtensions {
 
         switch (swaggerGenSettings.AuthenticationSettings.AuthorizationType) {
             case AuthorizationType.Basic:
-                c.AddBasicAuthentication(swaggerGenSettings);
+                c.AddBasicAuthentication();
                 break;
-
+            case AuthorizationType.Bearer:
+                c.AddTokenAuthentication();
+                break;
             default:
                 throw new NotImplementedException();
         }
     }
 
-    internal static void AddBasicAuthentication(this SwaggerGenOptions c, SwaggerGenSettings swaggerGenSettings) {
+    internal static void AddBasicAuthentication(this SwaggerGenOptions c) {
         c.AddSecurityDefinition(AuthorizationType.Basic, new OpenApiSecurityScheme {
             Name = HttpHeaderConsts.AuthorizationHeaderKey,
             Type = SecuritySchemeType.Http,
-            Scheme = swaggerGenSettings.AuthenticationSettings.AuthorizationType,
+            Scheme = AuthorizationType.Basic,
             In = ParameterLocation.Header,
-            Description = "Basic Authorization header using the Bearer scheme."
+            Description = "Authorization header using the basic scheme."
         });
 
         c.AddSecurityRequirement(new OpenApiSecurityRequirement {
@@ -79,6 +81,28 @@ public static class ServiceCollectionExtensions {
                     Array.Empty<string>()
                 }
             });
+    }
+
+    internal static void AddTokenAuthentication(this SwaggerGenOptions c) {
+        c.AddSecurityDefinition(AuthorizationType.Bearer, new OpenApiSecurityScheme {
+            Name = HttpHeaderConsts.AuthorizationHeaderKey,
+            Type = SecuritySchemeType.Http,
+            Scheme = AuthorizationType.Bearer,
+            In = ParameterLocation.Header,
+            Description = "Authorization header using the bearer scheme."
+        });
+
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+            {
+                new OpenApiSecurityScheme {
+                    Reference = new OpenApiReference {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = AuthorizationType.Bearer
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
     }
 
     internal static void AddXmlCommentsIncluding(this SwaggerGenOptions c, SwaggerGenSettings swaggerGenSettings, Assembly executingAssembly) {
