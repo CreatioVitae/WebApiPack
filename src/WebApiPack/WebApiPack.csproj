@@ -6,7 +6,7 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <Version>0.10.1.1</Version>
+    <Version>0.10.2</Version>
     <Authors>Vitae</Authors>
     <PackageProjectUrl>https://github.com/CreatioVitae/WebApiPack</PackageProjectUrl>
     <Description>For ASP.NET Core REST API Pack;
@@ -14,7 +14,7 @@
 Include Default Builder;</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <FileVersion></FileVersion>
-    <PackageReleaseNotes>Use IgnoreForceRedirectsToHttps.</PackageReleaseNotes>
+    <PackageReleaseNotes>upgrade package.</PackageReleaseNotes>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -28,6 +28,6 @@ Include Default Builder;</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WebPack.CoreLib" Version="0.10.1" />
+    <PackageReference Include="WebPack.CoreLib" Version="0.10.2" />
   </ItemGroup>
 </Project>
