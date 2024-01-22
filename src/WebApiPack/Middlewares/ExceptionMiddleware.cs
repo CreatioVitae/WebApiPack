@@ -9,14 +9,10 @@ using WebApiPack.Controllers.ApiResults;
 
 namespace WebApiPack.Middlewares;
 
-public class ExceptionMiddleware {
-    private readonly RequestDelegate _next;
-
-    public ExceptionMiddleware(RequestDelegate next) => _next = next;
-
+public class ExceptionMiddleware(RequestDelegate next) {
     public async Task InvokeAsync(HttpContext httpContext) {
         try {
-            await _next(httpContext);
+            await next(httpContext);
         }
         catch (Exception ex) {
             await HandleExceptionAsync(httpContext, ex);
