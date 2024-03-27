@@ -19,7 +19,14 @@ public class ExceptionMiddleware(RequestDelegate next) {
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception) {
+    private static readonly JsonSerializerOptions DefaultJsonSerializerOptions = new() {
+        Encoder = new NoEscapingJsonEncoder(),
+        WriteIndented = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
+private static Task HandleExceptionAsync(HttpContext context, Exception exception) {
         //Todo:HttpException Handling...
 
         Log.Fatal(exception, $"{nameof(HandleExceptionAsync)}", new { originalPath = context.Request.Path, RequestHeaders = context.Request.Headers });
@@ -29,12 +36,7 @@ public class ExceptionMiddleware(RequestDelegate next) {
         return context.Response.WriteAsync(
             JsonSerializer.Serialize(
                 new ErrorResult("システムエラーが発生しました。", exception),
-                new JsonSerializerOptions {
-                    Encoder = new NoEscapingJsonEncoder(),
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-                }
+                DefaultJsonSerializerOptions
             )
         );
     }
