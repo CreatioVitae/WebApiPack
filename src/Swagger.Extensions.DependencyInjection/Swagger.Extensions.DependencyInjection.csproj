@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>1.5.1</Version>
+    <Version>1.5.2</Version>
     <Authors>Vitae</Authors>
     <Description>For ASP.NET Core Swagger Extension;
 
@@ -21,6 +21,6 @@ Include Default Builder;</Description>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="WebPack.Identity.CoreLib" Version="0.11.1" />
+    <PackageReference Include="WebPack.Identity.CoreLib" Version="0.11.2" />
   </ItemGroup>
 </Project>
