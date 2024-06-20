@@ -30,6 +30,12 @@ public static class ApplicationBuilderExtensions {
             app.UseHttpsRedirection();
         }
 
+        var responseCompressionEnable = configureSettings?.ResponseCompressionEnable ?? false;
+
+        if (responseCompressionEnable) {
+            app.UseResponseCompression();
+        }
+
         app.UseRouting();
 
         app.UseCors(CorsConst.PolicyName);
