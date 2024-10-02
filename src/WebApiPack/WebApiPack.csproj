@@ -6,7 +6,7 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <Version>0.18.1</Version>
+    <Version>0.19.1</Version>
     <Authors>Vitae</Authors>
     <PackageProjectUrl>https://github.com/CreatioVitae/WebApiPack</PackageProjectUrl>
     <Description>For ASP.NET Core REST API Pack;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using WebApiPack.ConstantValues;
@@ -8,7 +9,7 @@ using WebApiPack.ConstantValues;
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions {
-    public static IServiceCollection CreateDefaultBuilder(this IServiceCollection serviceDescriptors, IEnumerable<Type>? filterTypesForGlobalEntry = null) {
+    public static IServiceCollection CreateDefaultBuilder(this IServiceCollection serviceDescriptors, IEnumerable<Type>? filterTypesForGlobalEntry = null, IEnumerable<string>? exposedHeaderNames = default) {
         serviceDescriptors
             .AddHttpContextAccessor()
             .AddControllers();
@@ -28,7 +29,15 @@ public static class ServiceCollectionExtensions {
                 option.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 option.JsonSerializerOptions.Encoder = new NoEscapingJsonEncoder();
             })
-            .AddCors(option => option.AddPolicy(CorsConst.PolicyName, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+            .AddCors(option => option.AddPolicy(CorsConst.PolicyName, builder => {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+
+                if (exposedHeaderNames.IsNotNullAndAny()) {
+                    foreach (var exposedHeaderName in exposedHeaderNames) {
+                        builder.WithExposedHeaders(exposedHeaderName);
+                    }
+                }
+            }));
 
         return serviceDescriptors;
     }
